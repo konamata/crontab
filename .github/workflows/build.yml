@@ -5,45 +5,49 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-env:
-  PLATFORMS: ${{ vars.PLATFORMS }}
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build-and-publish:
-    runs-on: ${{ vars.RUNNER_OS }}
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: self-hosted-amd64
+          - platform: linux/arm64
+            runner: self-hosted-arm64
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.MY_PAT_TOKEN }}
-
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
+      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver-opts: image=moby/buildkit:master
-
+      
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.MY_PAT_TOKEN }}
-
+      
       - name: Build and Push Docker image
-        id: push-docker
         uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
-          platforms: ${{ env.PLATFORMS }}
+          platforms: ${{ matrix.platform }}
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/${{ github.repository }}:latest
           provenance: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
