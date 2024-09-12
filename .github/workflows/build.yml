@@ -3,6 +3,7 @@ name: Build and publish
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 env:
   PLATFORMS: ${{ vars.PLATFORMS }}
@@ -13,7 +14,7 @@ concurrency:
 
 jobs:
   build-and-publish:
-    runs-on: self-hosted-amd64
+    runs-on: ${{ vars.RUNNER_OS }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
