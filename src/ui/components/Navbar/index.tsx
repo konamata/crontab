@@ -34,15 +34,7 @@ const Nav = styled.nav`
 const Navbar = () => (
   <Nav>
     <ul>
-      <li>
-        <ContributeButton
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/cronhub/crontab"
-        >
-          Contribute
-        </ContributeButton>
-      </li>
+      <li></li>
       <li></li>
     </ul>
   </Nav>

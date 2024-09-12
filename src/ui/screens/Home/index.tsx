@@ -80,10 +80,7 @@ export default class Home extends Component<
     return (
       <InnerContainer>
         <ValuePropContainer>
-          Cron expression generator by{" "}
-          <a href="https://cronhub.io?utm_source=crontab&utm_medium=referral&utm_campaign=sideproject-campaign" title="crontab">
-            Cronhub
-          </a>. Schedule and monitor jobs without any infra work.
+          Schedule and monitor jobs without any infra work.
         </ValuePropContainer>
         <Wrapper>
           <Field
