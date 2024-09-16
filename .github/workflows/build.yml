@@ -11,14 +11,7 @@ concurrency:
 
 jobs:
   build-and-publish:
-    strategy:
-      matrix:
-        include:
-          - platform: linux/amd64
-            runner: self-hosted-amd64
-          - platform: linux/arm64
-            runner: self-hosted-arm64
-    runs-on: ${{ matrix.runner }}
+    runs-on: it
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -45,9 +38,8 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           push: true
+          no-cache: true
           tags: ghcr.io/${{ github.repository }}:latest
           provenance: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
