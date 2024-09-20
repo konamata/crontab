@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   build-and-publish:
-    runs-on: it
+    runs-on: ocean
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
